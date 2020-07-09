@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
+import ProjectForm from './components/ProjectForm'
+import ProjectList from './components/ProjectList'
 import api from './services/api';
 
 import './App.css';
@@ -7,6 +8,26 @@ import image from './assets/viralatinha.jpg';
 
 function App() {
   const [projects, setProjects] = useState([]);
+  
+  async function handleAddProject(event, title, owner) {
+    event.preventDefault();
+    
+    const response = await api.post('/projects', {
+      "title": title,
+	    "owner": owner
+    });
+
+    setProjects([...projects, response.data]);
+  };
+  
+  function handleDeleteProject(id, index) {
+    api.delete(`/projects/${id}`)
+    
+    console.log(projects)
+    projects.splice(index, 1)
+    console.log(projects)
+    setProjects([...projects]);
+  }
 
   useEffect(() => {
     api.get('/projects').then(response => {
@@ -14,24 +35,11 @@ function App() {
     })
   }, [])
 
-  async function handleAddProject() {
-    const response = await api.post('/projects', {
-      "title": `Novo Projeto ${Date.now()}`,
-	    "owner": "Bernardo Henrique"
-    });
-    console.log(response)
-    response.status < 400 ? setProjects([...projects, response.data]) : null;
-  }
-
   return (
     <>
-      <Header title="Projetos">
-        <ul>
-          { projects.map(project => <li key={ project.id }> { project.title } </li>) }
-        </ul>
-      </Header>
-      <button type="button" onClick={handleAddProject}> Adicionar Projeto </button>
-      <br/>
+      <ProjectForm handleAddProject={handleAddProject}/>
+
+      <ProjectList projects={projects} handleDeleteProject={handleDeleteProject}/>
     </>
   )
 }
