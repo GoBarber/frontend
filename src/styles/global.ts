@@ -26,4 +26,20 @@ export default createGlobalStyle`
   button {
     cursor: pointer
   }
+
+
+
+  /* Change Autofill inputs color */
+  @-webkit-keyframes autofill {
+      0%,100% {
+          color: #f4ede8;
+          background: transparent;
+      }
+  }
+
+  input:-webkit-autofill {
+      -webkit-animation-delay: 1s; /* Safari support - any positive time runs instantly */
+      -webkit-animation-name: autofill;
+      -webkit-animation-fill-mode: both;
+  }
 `;
