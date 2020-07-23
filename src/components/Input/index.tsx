@@ -5,10 +5,11 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { IconBaseProps } from 'react-icons';
 import { useField } from '@unform/core';
+import { IconBaseProps } from 'react-icons';
+import { FiAlertCircle } from 'react-icons/fi';
 
-import { Container } from './styles';
+import { Container, Error } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -24,14 +25,14 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
 
   // Porque usar useCallBack?
   // No react, toda fez que uma função (ou componente) tem mudança de estado ou props, ele é renderizado novamente
-  // Isso quer dizer que a função hadleInputBlur seria adicionada à memória novamente muitas vezes
+  // Isso quer dizer que a função handleInputBlur seria adicionada à memória novamente muitas vezes
   // O useCallback indica quando ela função deve ser adicionada/reescrita, neste caso, [] => apenas no começo
-  const hadleInputBlur = useCallback(() => {
+  const handleInputBlur = useCallback(() => {
     setIsFocused(false);
     setIsFilled(!!inputRef.current?.value);
   }, []);
 
-  const hadleInputFocus = useCallback(() => setIsFocused(true), []);
+  const handleInputFocus = useCallback(() => setIsFocused(true), []);
 
   useEffect(() => {
     registerField({
@@ -43,17 +44,21 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
 
   return (
     <>
-      <Container isFilled={isFilled} isFocused={isFocused}>
+      <Container isErrored={!!error} isFilled={isFilled} isFocused={isFocused}>
         {Icon && <Icon size={20} />}
         <input
-          onFocus={() => hadleInputFocus()}
-          onBlur={() => hadleInputBlur()}
+          onFocus={() => handleInputFocus()}
+          onBlur={() => handleInputBlur()}
           defaultValue={defaultValue}
           ref={inputRef}
           {...rest}
         />
+        {error && (
+          <Error title={error}>
+            <FiAlertCircle color="#c53030" size={20} />
+          </Error>
+        )}
       </Container>
-      {error}
     </>
   );
 };

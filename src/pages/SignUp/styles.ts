@@ -14,16 +14,14 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  place-content: center;
+  justify-content: center;
 
   width: 100%;
   max-width: 700px;
 
   form {
     margin: 80px 0;
-    max-width: 340px;
-    /* min-width: 50%; */
+    width: 340px;
     text-align: center;
 
     h1 {
@@ -48,6 +46,7 @@ export const Content = styled.div`
   /* Estiliza apenas os a's que vem diretamente após a tag content */
   > a {
     color: #f4ede8;
+    display: block;
     font-size: 14px;
     text-decoration: none;
 
