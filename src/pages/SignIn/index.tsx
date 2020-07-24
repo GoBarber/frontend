@@ -5,7 +5,7 @@ import { Form } from '@unform/web';
 
 import logo from '../../assets/logo.svg';
 
-import AuthContext from '../../context/AuthContext';
+import { AuthContext, SignInCredentials } from '../../context/AuthContext';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Input from '../../components/Input';
@@ -17,19 +17,23 @@ import { Container, Content, Background } from './styles';
 export const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const { name } = useContext(AuthContext);
-  console.log(name);
+  const { signIn } = useContext(AuthContext);
 
-  const handleSubmit = useCallback(async (data) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSubmit = useCallback(
+    async (data: SignInCredentials) => {
+      try {
+        formRef.current?.setErrors({});
 
-      await signInSchema.validate(data, { abortEarly: false });
-    } catch (err) {
-      const errors = getValidationErrors(err);
-      formRef.current?.setErrors(errors);
-    }
-  }, []);
+        await signInSchema.validate(data, { abortEarly: false });
+
+        signIn({ email: data.email, password: data.password });
+      } catch (err) {
+        const errors = getValidationErrors(err);
+        formRef.current?.setErrors(errors);
+      }
+    },
+    [signIn],
+  );
 
   return (
     <Container>
