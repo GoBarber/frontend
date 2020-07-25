@@ -20,7 +20,7 @@ export const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
   const { signIn } = useAuth();
-  const { addToast, removeToast } = useToast();
+  const { addToast } = useToast();
 
   const handleSubmit = useCallback(
     async (data) => {
@@ -30,6 +30,11 @@ export const SignIn: React.FC = () => {
         await signInSchema.validate(data, { abortEarly: false });
 
         await signIn({ email: data.email, password: data.password });
+
+        addToast({
+          type: 'success',
+          title: 'Autentição feita com sucesso',
+        });
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
