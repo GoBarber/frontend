@@ -36,8 +36,11 @@ export const SignIn: React.FC = () => {
           formRef.current?.setErrors(errors);
         }
 
-        // Disparar toast
-        addToast();
+        addToast({
+          type: 'error',
+          title: 'Erro na autenticação',
+          description: 'Cheque email e senha.',
+        });
       }
     },
     [signIn, addToast],
