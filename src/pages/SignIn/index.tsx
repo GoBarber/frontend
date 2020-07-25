@@ -14,7 +14,7 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
-import { signInSchema } from './dataShecma';
+import { signInSchema } from './dataSchema';
 import { Container, Content, AnimationContainer, Background } from './styles';
 
 export const SignIn: React.FC = () => {
@@ -46,7 +46,7 @@ export const SignIn: React.FC = () => {
         addToast({
           type: 'error',
           title: 'Erro na autenticação',
-          description: 'Cheque email e senha.',
+          description: err.response.data.message,
         });
       }
     },
